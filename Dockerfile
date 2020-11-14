@@ -1,13 +1,13 @@
 FROM node:12-slim
 
-LABEL repository="https://github.com/johno/actions-push-subdirectories"
-LABEL homepage="https://github.com/johno/actions-push-subdirectories"
-LABEL maintainer="John Otander <johnotander@gmail.com>"
+LABEL repository="https://github.com/NoahDragon/action-push-repo-as-subdirectory-in-another-repo"
+LABEL homepage="https://github.com/NoahDragon/action-push-repo-as-subdirectory-in-another-repo"
+LABEL maintainer="Abner Chou <hi@abnerchou.me>"
 
-LABEL com.github.actions.name="GitHub Action to Push Subdirectories to Another Repo"
-LABEL com.github.actions.description="Automatically push subdirectories in a monorepo to their own repositories"
-LABEL com.github.actions.icon="package"
-LABEL com.github.actions.color="purple"
+LABEL com.github.actions.name="Push Repo as Subdirectory"
+LABEL com.github.actions.description="Github action to push a branch under a repo as a subdirectory in another repo."
+LABEL com.github.actions.icon="git-pull-request"
+LABEL com.github.actions.color="blue"
 
 RUN apt-get update && \
     apt-get upgrade -y && \
