@@ -5,7 +5,7 @@ LABEL homepage="https://github.com/NoahDragon/action-push-repo-as-subdirectory-i
 LABEL maintainer="Abner Chou <hi@abnerchou.me>"
 
 LABEL com.github.actions.name="Push Repo as Subdirectory"
-LABEL com.github.actions.description="Github action to push a branch under a repo as a subdirectory in another repo."
+LABEL com.github.actions.description="Github action to push a repo as a subdirectory in another repo."
 LABEL com.github.actions.icon="git-pull-request"
 LABEL com.github.actions.color="blue"
 
