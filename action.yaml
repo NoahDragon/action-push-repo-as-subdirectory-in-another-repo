@@ -1,5 +1,29 @@
 name: 'Push Repo as Subdirectory'
 description: 'Github action to push a branch under a repo as a subdirectory in another repo.'
 author: 'Abner Chou'
-icon: 'git-pull-request'
-color: 'blue'
+inputs:
+  dest-repo:
+    description: 'Destination repository'
+    required: true
+  dest-branch:
+    description: '[Optional] Destination branch name default main'
+    required: false
+    default: 'main'
+  dest-foler:
+    description: 'Destination folder name'
+    required: true
+  commit-message:
+    description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
+    default: 'Update from ORIGIN_COMMIT'
+    required: false
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.dest-repo }}
+    - ${{ inputs.dest-branch }}
+    - ${{ inputs.dest-folder }} 
+    - ${{ inputs.commit-message }}
+branding:
+  icon: 'git-pull-request'
+  color: 'blue'

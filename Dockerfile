@@ -1,4 +1,4 @@
-FROM node:12-slim
+FROM alpine:3.12
 
 LABEL repository="https://github.com/NoahDragon/action-push-repo-as-subdirectory-in-another-repo"
 LABEL homepage="https://github.com/NoahDragon/action-push-repo-as-subdirectory-in-another-repo"
@@ -9,10 +9,8 @@ LABEL com.github.actions.description="Github action to push a branch under a rep
 LABEL com.github.actions.icon="git-pull-request"
 LABEL com.github.actions.color="blue"
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y git && \
-    apt-get install -y jq
+RUN apk add --no-cache git
 
 COPY "entrypoint.sh" "/entrypoint.sh"
+
 ENTRYPOINT ["/entrypoint.sh"]

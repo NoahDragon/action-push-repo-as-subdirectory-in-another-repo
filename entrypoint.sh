@@ -1,55 +1,49 @@
-#!/bin/bash
+#!/bin/sh -l
 
-set -e
+set -e  # if a command fails it stops the execution
+set -u  # script fails if trying to access to an undefined variable
 
-FOLDER=$1
-GITHUB_USERNAME=$2
-STARTER_NAME="${3:-name}"
-BASE=$(pwd)
+DEST_REPO="$1"
+DEST_BRANCH="$2"
+DEST_FOLDER="$3"
+COMMIT_MESSAGE="$4"
 
-git config --global user.email "johno-actions-push-subdirectories@example.org"
-git config --global user.name "$GITHUB_USERNAME"
+REPO_DIR=$(mktemp -d)
+CLONE_DIR="$REPO_DIR/$DEST_FOLDER"
 
-echo "Cloning folders in $FOLDER and pushing to $GITHUB_USERNAME"
-echo "Using $STARTER_NAME as the package.json key"
+echo "Cloning destination git repository"
+# Setup git
+git config --global user.email "noahdragon-actions-push-repo-as-subdirectories@example.org"
+git config --global user.name "actions-push-repo-as-subdirectories"
+git clone --single-branch --branch "$DEST_BRANCH" "https://$API_TOKEN_GITHUB@github.com/$DEST_REPO.git" "$REPO_DIR"
 
-# sync to read-only clones
-for folder in $FOLDER/*; do
-  [ -d "$folder" ] || continue # only directories
-  cd $BASE
+echo "Check if destinate folder exists, if not create new one"
+mkdir -p $CLONE_DIR
+ls -la "$CLONE_DIR"
 
-  echo "$folder"
 
-  NAME=$(cat $folder/package.json | jq --arg name "$STARTER_NAME" -r '.[$name]')
-  echo "  Name: $NAME"
-  IS_WORKSPACE=$(cat $folder/package.json | jq -r '.workspaces')
-  CLONE_DIR="__${NAME}__clone__"
-  echo "  Clone dir: $CLONE_DIR"
+echo "Cleaning destination repository of old files"
+# Copy files into the git and deletes all git
+find "$CLONE_DIR" | grep -v "^$CLONE_DIR/\.git" | grep -v "^$CLONE_DIR$" | xargs rm -rf # delete all files (to handle deletions)
+ls -la "$CLONE_DIR"
 
-  # clone, delete files in the clone, and copy (new) files over
-  # this handles file deletions, additions, and changes seamlessly
-  git clone --depth 1 https://$API_TOKEN_GITHUB@github.com/$GITHUB_USERNAME/$NAME.git $CLONE_DIR &> /dev/null
-  cd $CLONE_DIR
-  find . | grep -v ".git" | grep -v "^\.*$" | xargs rm -rf # delete all files (to handle deletions in monorepo)
-  cp -r $BASE/$folder/. .
+echo "Copying contents to git repo"
+cp -r "$SOURCE_DIRECTORY"/* "$CLONE_DIR"
+cd "$REPO_DIR"
+ls -la
 
-  # generate a new yarn.lock file based on package-lock.json unless you're in a workspace
-  if [ "$IS_WORKSPACE" = null ]; then
-    echo "  Regenerating yarn.lock"
-    rm -rf yarn.lock
-    yarn
-  fi
+echo "Adding git commit"
 
-  # Commit if there is anything to
-  if [ -n "$(git status --porcelain)" ]; then
-    echo  "  Committing $NAME to $GITHUB_REPOSITORY"
-    git add .
-    git commit --message "Update $NAME from $GITHUB_REPOSITORY"
-    git push origin master
-    echo  "  Completed $NAME"
-  else
-    echo "  No changes, skipping $NAME"
-  fi
+ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
+COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
 
-  cd $BASE
-done
+git add .
+git status
+
+# git diff-index : to avoid doing the git commit failing if there are no changes to be commit
+git diff-index --quiet HEAD || git commit --message "$COMMIT_MESSAGE"
+
+echo "Pushing git commit"
+# --set-upstream: sets de branch when pushing to a branch that does not exist
+git push origin --set-upstream "$DEST_BRANCH"
+
