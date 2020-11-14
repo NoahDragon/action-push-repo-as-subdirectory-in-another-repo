@@ -9,7 +9,7 @@ inputs:
     description: '[Optional] Destination branch name default main'
     required: false
     default: 'main'
-  dest-foler:
+  dest-folder:
     description: 'Destination folder name'
     required: true
   commit-message:
