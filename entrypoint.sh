@@ -28,7 +28,7 @@ find "$CLONE_DIR" | grep -v "^$CLONE_DIR/\.git" | grep -v "^$CLONE_DIR$" | xargs
 ls -la "$CLONE_DIR"
 
 echo "Copying contents to git repo"
-cp -r "$SOURCE_DIRECTORY"/* "$CLONE_DIR"
+cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
 cd "$REPO_DIR"
 ls -la
 
