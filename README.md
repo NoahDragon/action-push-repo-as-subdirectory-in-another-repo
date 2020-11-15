@@ -21,7 +21,7 @@ DEMO: https://github.com/NoahDragon/simple-video-cutter/blob/main/.github/workfl
 The destination repository name, following the pattern "USERNAME/REPO_NAME".
 
 ### dest-branch [optional]
-The branch name in destination repository. Default is main.
+The branch name in destination repository. Default is main. If not exists, CI will error out.
 
 ### dest-folder
 The folder name in destination repo. If not exists, will create a new one. Please make sure the folder name is correct, otherwise, all files under the folder will be overwritten.
