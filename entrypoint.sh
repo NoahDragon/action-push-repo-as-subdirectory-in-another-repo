@@ -1,4 +1,4 @@
-#!/bin/sh -l
+#!/bin/bash
 
 set -e  # if a command fails it stops the execution
 set -u  # script fails if trying to access to an undefined variable
@@ -24,8 +24,7 @@ mkdir -p $CLONE_DIR
 ls -la "$CLONE_DIR"
 
 echo "Store exclude files/folders into a temp folder"
-IFS=';'
-read -a strarr <<< "$EXCLUDES"
+IFS=';'; read -a strarr <<< "$EXCLUDES"
 for val in "${strarr[@]}";
 do
   cp -rf "$val" "$TMP_DIR"
