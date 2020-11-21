@@ -16,6 +16,10 @@ inputs:
     description: '[Optional] commit message for the output repository. ORIGIN_COMMIT is replaced by the URL@commit in the origin repo'
     default: 'Update from ORIGIN_COMMIT'
     required: false
+  excludes:
+    description: '[Optional] exclude files which already in the destination repo, like configurations file.'
+    default: ''
+    required: false
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -24,6 +28,7 @@ runs:
     - ${{ inputs.dest-branch }}
     - ${{ inputs.dest-folder }} 
     - ${{ inputs.commit-message }}
+    - ${{ inputs.excludes }}
 branding:
   icon: 'git-pull-request'
   color: 'blue'

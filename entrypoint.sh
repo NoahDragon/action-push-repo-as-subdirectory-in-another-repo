@@ -7,9 +7,11 @@ DEST_REPO="$1"
 DEST_BRANCH="$2"
 DEST_FOLDER="$3"
 COMMIT_MESSAGE="$4"
+EXCLUDES="$5"
 
 REPO_DIR=$(mktemp -d)
 CLONE_DIR="$REPO_DIR/$DEST_FOLDER"
+TMP_DIR=$(mktemp -d)
 
 echo "Cloning destination git repository"
 # Setup git
@@ -21,6 +23,13 @@ echo "Check if destinate folder exists, if not create new one"
 mkdir -p $CLONE_DIR
 ls -la "$CLONE_DIR"
 
+echo "Store exclude files/folders into a temp folder"
+IFS=';';read -a strarr <<< "$EXCLUDES"
+for val in "${strarr[@]}";
+do
+  cp -rf "$val" "$TMP_DIR"
+done
+ls -la "$TMP_DIR"
 
 echo "Cleaning destination repository of old files"
 # Copy files into the git and deletes all git
@@ -29,11 +38,14 @@ ls -la "$CLONE_DIR"
 
 echo "Copying contents to git repo"
 cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
-cd "$REPO_DIR"
-ls -la
+ls -la "$REPO_DIR"
+
+echo "Copying back the excluded files/folders, may overwrite the existing ones."
+cp -rf "$TMP_DIR"/* "$CLONE_DIR"
+ls -la "$REPO_DIR"
 
 echo "Adding git commit"
-
+cd "$REPO_DIR"
 ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
 COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
 

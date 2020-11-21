@@ -29,6 +29,9 @@ The folder name in destination repo. If not exists, will create a new one. Pleas
 ### commit-message [optional]
 The commit message to be used in the output repository. Optional and defaults to "Update from $REPOSITORY_URL@commit".
 
+### excludes [optional]
+The list of excluded files/folders in the destination repo, so this action will not overwrite them, e.g. config files. The format is a semicolon `;` split string.
+
 ### API_TOKEN_GITHUB (env)
 E.g.:
   `API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}`
