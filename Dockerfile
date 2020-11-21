@@ -10,6 +10,7 @@ LABEL com.github.actions.icon="git-pull-request"
 LABEL com.github.actions.color="blue"
 
 RUN apk add --no-cache git
+RUN apk add --no-cache bash
 
 COPY "entrypoint.sh" "/entrypoint.sh"
 
