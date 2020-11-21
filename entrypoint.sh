@@ -38,14 +38,15 @@ ls -la "$CLONE_DIR"
 
 echo "Copying contents to git repo"
 cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
-ls -la "$REPO_DIR"
+ls -la "$CLONE_DIR"
 
 echo "Copying back the excluded files/folders, may overwrite the existing ones."
 cp -rf "$TMP_DIR"/* "$CLONE_DIR"
-ls -la "$REPO_DIR"
+ls -la "$CLONE_DIR"
 
 echo "Adding git commit"
 cd "$REPO_DIR"
+ls -la
 ORIGIN_COMMIT="https://github.com/$GITHUB_REPOSITORY/commit/$GITHUB_SHA"
 COMMIT_MESSAGE="${COMMIT_MESSAGE/ORIGIN_COMMIT/$ORIGIN_COMMIT}"
 
