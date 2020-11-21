@@ -27,7 +27,7 @@ echo "Store exclude files/folders into a temp folder"
 IFS=';'; read -a strarr <<< "$EXCLUDES"
 for val in "${strarr[@]}";
 do
-  cp -rf "$val" "$TMP_DIR"
+  [[ -e "$CLONE_DIR"/"$val" ]] && cp -rf "$CLONE_DIR"/"$val" "$TMP_DIR"
 done
 ls -la "$TMP_DIR"
 
