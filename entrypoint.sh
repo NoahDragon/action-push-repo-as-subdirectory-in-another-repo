@@ -27,6 +27,7 @@ echo "Store exclude files/folders into a temp folder"
 IFS=';'; read -a strarr <<< "$EXCLUDES"
 for val in "${strarr[@]}";
 do
+  echo "$val\n"
   [[ -e "$CLONE_DIR"/"$val" ]] && cp -rf "$CLONE_DIR"/"$val" "$TMP_DIR"
 done
 ls -la "$TMP_DIR"
@@ -41,7 +42,7 @@ cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 echo "Copying back the excluded files/folders, may overwrite the existing ones."
-cp -rf "$TMP_DIR"/* "$CLONE_DIR"
+[[ -z "$(ls -A "$TMP_DIR")" ]] && cp -rf "$TMP_DIR"/* "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 echo "Adding git commit"
