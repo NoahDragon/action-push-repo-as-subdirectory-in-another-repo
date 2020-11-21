@@ -24,7 +24,8 @@ mkdir -p $CLONE_DIR
 ls -la "$CLONE_DIR"
 
 echo "Store exclude files/folders into a temp folder"
-IFS=';';read -a strarr <<< "$EXCLUDES"
+IFS=';'
+read -a strarr <<< "$EXCLUDES"
 for val in "${strarr[@]}";
 do
   cp -rf "$val" "$TMP_DIR"
