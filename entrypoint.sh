@@ -28,7 +28,7 @@ IFS=';'; read -a strarr <<< "$EXCLUDES"
 for val in "${strarr[@]}";
 do
   echo "$val"
-  [[ -e "$CLONE_DIR"/"$val" ]] && cp -rf "$CLONE_DIR"/"$val" "$TMP_DIR"
+  [[ -e "$CLONE_DIR"/"$val" || -d "$CLONE_DIR"/"$val" ]] && cp -rf "$CLONE_DIR"/"$val" "$TMP_DIR"
 done
 ls -la "$TMP_DIR"
 
@@ -42,7 +42,11 @@ cp -r "$GITHUB_WORKSPACE"/* "$CLONE_DIR"
 ls -la "$CLONE_DIR"
 
 echo "Copying back the excluded files/folders, may overwrite the existing ones."
-[[ -z "$(ls -A $TMP_DIR)" ]] && cp -rf "$TMP_DIR"/* "$CLONE_DIR"
+for val in "${strarr[@]}";
+do
+  echo "$val"
+  [[ -e "$TMP_DIR"/"$val" || -d "$TMP_DIR"/"$val" ]] && cp -rf "$TMP_DIR"/"$val" "$CLONE_DIR"
+done
 ls -la "$CLONE_DIR"
 
 echo "Adding git commit"
